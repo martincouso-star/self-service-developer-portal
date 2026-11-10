@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint:all
+
+      - name: Typecheck
+        run: yarn tsc
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Test
+        run: yarn test --maxWorkers=2
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Build
+        run: yarn build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Validate catalog and template YAML
+        run: node scripts/validate-catalog.mjs

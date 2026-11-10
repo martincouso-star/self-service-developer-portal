@@ -1,0 +1,118 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform
+  description: Platform engineering, which owns the developer portal.
+spec:
+  type: department
+  children: [checkout, identity, storefront]
+  members: [ada.okonkwo]
+  profile:
+    displayName: Platform
+    email: platform@marlow.example
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: checkout
+  description: Checkout and payments services.
+spec:
+  type: team
+  parent: platform
+  children: []
+  members: [ben.cho]
+  profile:
+    displayName: Checkout
+    email: checkout@marlow.example
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: identity
+  description: Identity and session services.
+spec:
+  type: team
+  parent: platform
+  children: []
+  members: [priya.nair]
+  profile:
+    displayName: Identity
+    email: identity@marlow.example
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: storefront
+  description: Storefront website and product index.
+spec:
+  type: team
+  parent: platform
+  children: []
+  members: [sam.rivera]
+  profile:
+    displayName: Storefront
+    email: storefront@marlow.example
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: guests
+  description: Local guest sign-in used by the development auth provider.
+spec:
+  type: team
+  children: []
+  members: [user:development/guest]
+  profile:
+    displayName: Guests
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ada.okonkwo
+spec:
+  profile:
+    displayName: Ada Okonkwo
+    email: ada.okonkwo@marlow.example
+  memberOf: [platform]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ben.cho
+spec:
+  profile:
+    displayName: Ben Cho
+    email: ben.cho@marlow.example
+  memberOf: [checkout]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: priya.nair
+spec:
+  profile:
+    displayName: Priya Nair
+    email: priya.nair@marlow.example
+  memberOf: [identity]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: sam.rivera
+spec:
+  profile:
+    displayName: Sam Rivera
+    email: sam.rivera@marlow.example
+  memberOf: [storefront]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: guest
+  namespace: development
+spec:
+  profile:
+    displayName: Guest
+    email: guest@example.com
+  memberOf: [group:default/guests]

@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: identity-api
+  description: Issues shopper sessions consumed by checkout and the storefront.
+  tags:
+    - node
+    - typescript
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/source-location: url:https://github.com/marlow-labs/identity-api
+    github.com/project-slug: marlow-labs/identity-api
+    marlow.dev/oncall: identity-primary
+    marlow.dev/runbook: https://marlow.example/runbooks/identity-api
+    marlow.dev/slo: "99.95%"
+    marlow.dev/has-tests: "true"
+  links:
+    - url: https://marlow.example/runbooks/identity-api
+      title: Runbook
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/identity
+  system: identity
+  providesApis:
+    - identity-openapi
+  dependsOn:
+    - resource:default/identity-postgres

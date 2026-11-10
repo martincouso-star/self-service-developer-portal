@@ -1,0 +1,102 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: fastapi-service
+  title: FastAPI Service
+  description: Scaffold a Python FastAPI service with tests, a container image, CI, and a catalog entry.
+  tags:
+    - python
+    - fastapi
+    - recommended
+spec:
+  owner: group:default/platform
+  type: service
+  parameters:
+    - title: Service
+      required:
+        - name
+        - description
+        - owner
+        - system
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique component name, used as the catalog name and Python package label.
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: One or two sentences. This is stored on the catalog entity.
+        owner:
+          title: Owner
+          type: string
+          description: Group or user that will own the new component.
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind: [Group, User]
+        system:
+          title: System
+          type: string
+          description: Catalog system name, for example checkout.
+          default: checkout
+        oncall:
+          title: On-call rotation
+          type: string
+          default: unassigned
+        runbook:
+          title: Runbook URL
+          type: string
+          default: https://marlow.example/runbooks/replace-me
+    - title: Repository
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+        publishToGithub:
+          title: Publish to GitHub
+          type: boolean
+          description: Requires GITHUB_TOKEN. Leave this off to generate the skeleton locally and stop before publish.
+          default: false
+  steps:
+    - id: fetch-base
+      name: Fetch skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          system: ${{ parameters.system }}
+          oncall: ${{ parameters.oncall }}
+          runbook: ${{ parameters.runbook }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+    - id: publish
+      name: Publish to GitHub
+      if: ${{ parameters.publishToGithub }}
+      action: publish:github
+      input:
+        description: ${{ parameters.description }}
+        repoUrl: ${{ parameters.repoUrl }}
+        defaultBranch: main
+        repoVisibility: private
+    - id: register
+      name: Register catalog entity
+      if: ${{ parameters.publishToGithub }}
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+  output:
+    text:
+      - title: Result
+        content: Generated ${{ parameters.name }}. Open the template dry-run to inspect files. Publishing to GitHub is skipped unless you enabled it and set GITHUB_TOKEN.

@@ -1,0 +1,15 @@
+{
+  "name": "${{ values.name }}",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Node.js service generated from the Marlow template.",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "npm run build && node --test dist/server.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "typescript": "~5.8.0"
+  }
+}

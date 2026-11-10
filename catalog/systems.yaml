@@ -1,0 +1,36 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: checkout
+  description: Takes an order from basket to payment authorization.
+spec:
+  owner: group:default/checkout
+  domain: commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: identity
+  description: Accounts, sessions, and service credentials for Marlow shoppers.
+spec:
+  owner: group:default/identity
+  domain: commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: storefront
+  description: The public website and the product index that feeds it.
+spec:
+  owner: group:default/storefront
+  domain: commerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: developer-platform
+  description: The internal developer portal and the templates it publishes.
+spec:
+  owner: group:default/platform
+  domain: platform

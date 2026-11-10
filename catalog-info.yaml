@@ -1,0 +1,23 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: developer-portal
+  title: Marlow Developer Portal
+  description: Backstage portal for the fictional Marlow commerce engineering org.
+  tags:
+    - backstage
+    - portal
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/source-location: url:https://github.com/martincouso-star/self-service-developer-portal
+    github.com/project-slug: martincouso-star/self-service-developer-portal
+    marlow.dev/has-tests: "true"
+  links:
+    - url: https://github.com/martincouso-star/self-service-developer-portal
+      title: Repository
+      icon: github
+spec:
+  type: website
+  lifecycle: experimental
+  owner: group:default/platform
+  system: developer-platform

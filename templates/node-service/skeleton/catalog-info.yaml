@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.name }}
+  description: ${{ values.description | dump }}
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: ${{ values.destination.owner }}/${{ values.destination.repo }}
+    backstage.io/source-location: url:https://github.com/${{ values.destination.owner }}/${{ values.destination.repo }}
+    marlow.dev/oncall: ${{ values.oncall | dump }}
+    marlow.dev/runbook: ${{ values.runbook | dump }}
+    marlow.dev/slo: "99.5%"
+    marlow.dev/has-tests: "true"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ${{ values.owner | dump }}
+  system: ${{ values.system | dump }}

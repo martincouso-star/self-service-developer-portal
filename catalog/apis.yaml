@@ -1,0 +1,116 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: checkout-openapi
+  description: HTTP API for creating a checkout and reading its status.
+  tags:
+    - http
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:default/checkout
+  system: checkout
+  definition: |
+    openapi: 3.0.3
+    info:
+      title: Checkout API
+      version: 1.0.0
+    paths:
+      /health:
+        get:
+          operationId: health
+          responses:
+            "200":
+              description: Service is up
+      /v1/checkouts:
+        post:
+          operationId: createCheckout
+          responses:
+            "201":
+              description: Checkout created
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: identity-openapi
+  description: HTTP API for shopper sessions used by checkout and the storefront.
+  tags:
+    - http
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:default/identity
+  system: identity
+  definition: |
+    openapi: 3.0.3
+    info:
+      title: Identity API
+      version: 1.0.0
+    paths:
+      /health:
+        get:
+          operationId: health
+          responses:
+            "200":
+              description: Service is up
+      /v1/sessions:
+        post:
+          operationId: createSession
+          responses:
+            "201":
+              description: Session created
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: payments-openapi
+  description: HTTP API the payments gateway exposes to checkout.
+  tags:
+    - http
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:default/checkout
+  system: checkout
+  definition: |
+    openapi: 3.0.3
+    info:
+      title: Payments API
+      version: 0.9.0
+    paths:
+      /v1/authorizations:
+        post:
+          operationId: authorize
+          responses:
+            "200":
+              description: Authorization decision
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: catalog-events
+  description: Asynchronous product updates consumed by the storefront index.
+  tags:
+    - events
+spec:
+  type: asyncapi
+  lifecycle: experimental
+  owner: group:default/storefront
+  system: storefront
+  definition: |
+    asyncapi: 2.6.0
+    info:
+      title: Catalog events
+      version: 0.1.0
+    channels:
+      product.updated:
+        subscribe:
+          message:
+            name: ProductUpdated
+            payload:
+              type: object
+              required: [sku]
+              properties:
+                sku:
+                  type: string
