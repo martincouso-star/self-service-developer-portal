@@ -1,0 +1,38 @@
+{
+  "name": "@internal/plugin-scorecard-common",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "description": "Shared production-readiness scorecard rules for the Marlow portal.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "backstage": {
+    "role": "common-library",
+    "pluginId": "scorecard",
+    "pluginPackages": [
+      "@internal/plugin-scorecard",
+      "@internal/plugin-scorecard-backend",
+      "@internal/plugin-scorecard-common"
+    ]
+  },
+  "scripts": {
+    "build": "backstage-cli package build",
+    "clean": "backstage-cli package clean",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test"
+  },
+  "dependencies": {
+    "@backstage/catalog-model": "^1.10.2"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.36.7"
+  },
+  "files": [
+    "dist"
+  ]
+}

@@ -1,0 +1,32 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: checkout-api
+  description: Accepts checkout requests and records payment attempts.
+  tags:
+    - python
+    - fastapi
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/source-location: url:https://github.com/marlow-labs/checkout-api
+    github.com/project-slug: marlow-labs/checkout-api
+    marlow.dev/oncall: checkout-primary
+    marlow.dev/runbook: https://marlow.example/runbooks/checkout-api
+    marlow.dev/slo: "99.9%"
+    marlow.dev/has-tests: "true"
+  links:
+    - url: https://marlow.example/runbooks/checkout-api
+      title: Runbook
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/checkout
+  system: checkout
+  providesApis:
+    - checkout-openapi
+  consumesApis:
+    - identity-openapi
+    - payments-openapi
+  dependsOn:
+    - resource:default/checkout-postgres
+    - component:default/payments-gateway

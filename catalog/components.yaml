@@ -1,0 +1,90 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payments-gateway
+  description: Authorizes card payments for the checkout service.
+  tags:
+    - payments
+  annotations:
+    backstage.io/source-location: url:https://github.com/marlow-labs/payments-gateway
+    github.com/project-slug: marlow-labs/payments-gateway
+    marlow.dev/oncall: checkout-primary
+    marlow.dev/has-tests: "true"
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/checkout
+  system: checkout
+  providesApis:
+    - payments-openapi
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: checkout-worker
+  description: Asynchronous worker that captures authorized checkouts.
+  tags:
+    - worker
+  annotations:
+    marlow.dev/has-tests: "true"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/checkout
+  system: checkout
+  consumesApis:
+    - checkout-openapi
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: storefront-web
+  description: Public website that lists products and starts a checkout.
+  tags:
+    - website
+  annotations:
+    backstage.io/source-location: url:https://github.com/marlow-labs/storefront-web
+    github.com/project-slug: marlow-labs/storefront-web
+    marlow.dev/has-tests: "true"
+spec:
+  type: website
+  lifecycle: production
+  owner: group:default/storefront
+  system: storefront
+  consumesApis:
+    - checkout-openapi
+    - catalog-events
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: catalog-indexer
+  description: Builds the product read model from catalog domain events.
+  tags:
+    - indexer
+  annotations:
+    backstage.io/source-location: url:https://github.com/marlow-labs/catalog-indexer
+    github.com/project-slug: marlow-labs/catalog-indexer
+    marlow.dev/oncall: storefront-primary
+    marlow.dev/runbook: https://marlow.example/runbooks/catalog-indexer
+    marlow.dev/has-tests: "true"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/storefront
+  system: storefront
+  providesApis:
+    - catalog-events
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: legacy-billing-sync
+  description: Nightly file drop that still copies invoices to the old ledger.
+  tags:
+    - legacy
+spec:
+  type: service
+  lifecycle: deprecated
+  owner: group:default/checkout
